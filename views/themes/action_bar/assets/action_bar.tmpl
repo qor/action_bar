@@ -1,0 +1,10 @@
+<script type='text/javascript'>
+  window.qorSwitchMode = function(actionSwitcher) {
+    location.href = "/admin/switch_mode?is_on=" + (actionSwitcher.value == "on")
+  };
+</script>
+
+<div class="qor-action-bar" style="background-color:rgb(100, 100, 100);width: 100%;height: 60px;">
+  <span>Qor</span>
+  <input class="qor-action-switcher" type="checkbox" onclick="window.qorSwitchMode(this)" />
+</div>
