@@ -13,8 +13,8 @@ import (
 )
 
 type ActionBar struct {
-	auth    admin.Auth
 	admin   *admin.Admin
+	auth    admin.Auth
 	Actions []*Action
 }
 
@@ -23,18 +23,15 @@ type Action struct {
 	Link string
 }
 
-func (bar *ActionBar) Register(admin *admin.Admin) {
-	bar.admin = admin
+func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
+	bar := &ActionBar{admin: admin, auth: auth}
 	router := admin.GetRouter()
 	router.Get("/switch_mode", SwitchMode)
+	return bar
 }
 
-func (bar *ActionBar) SetAuth(auth admin.Auth) {
-	bar.auth = auth
-}
-
-func (bar *ActionBar) SetActions(actions []*Action) {
-	bar.Actions = actions
+func (bar *ActionBar) RegisterAction(action *Action) {
+	bar.Actions = append(bar.Actions, action)
 }
 
 func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) template.HTML {
