@@ -7,4 +7,11 @@
 <div class="qor-action-bar" style="background-color:rgb(100, 100, 100);width: 100%;height: 60px;">
   <span>Qor</span>
   <input class="qor-action-switcher" {{if .Checked}}checked{{end}} type="checkbox" onclick="window.qorSwitchMode(this)" />
+
+  {{ if .CurrentUser }}
+    <span>Login in as {{.CurrentUser.DisplayName}}</span>
+    <a href="{{.Auth.LogoutURL .Context}}">Logout</a>
+  {{ else }}
+    <a href="{{.Auth.LoginURL .Context}}">Login</a>
+  {{ end }}
 </div>
