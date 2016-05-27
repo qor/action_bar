@@ -14,4 +14,12 @@
   {{ else }}
     <a href="{{.Auth.LoginURL .Context}}">Login</a>
   {{ end }}
+
+  {{if .Actions}}
+    <ul>
+      {{range $action := .Actions}}
+        <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
+      {{end}}
+    </ul>
+  {{end}}
 </div>

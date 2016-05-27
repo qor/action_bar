@@ -13,8 +13,14 @@ import (
 )
 
 type ActionBar struct {
-	auth  admin.Auth
-	admin *admin.Admin
+	auth    admin.Auth
+	admin   *admin.Admin
+	Actions []*Action
+}
+
+type Action struct {
+	Name string
+	Link string
 }
 
 func (bar *ActionBar) Register(admin *admin.Admin) {
@@ -25,6 +31,10 @@ func (bar *ActionBar) Register(admin *admin.Admin) {
 
 func (bar *ActionBar) SetAuth(auth admin.Auth) {
 	bar.auth = auth
+}
+
+func (bar *ActionBar) SetActions(actions []*Action) {
+	bar.Actions = actions
 }
 
 func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) template.HTML {
@@ -46,11 +56,13 @@ func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) 
 			Auth        admin.Auth
 			Context     *admin.Context
 			CurrentUser qor.CurrentUser
+			Actions     []*Action
 		}{
 			Checked:     checked,
 			Auth:        bar.auth,
 			Context:     context,
 			CurrentUser: bar.auth.GetCurrentUser(context),
+			Actions:     bar.Actions,
 		}
 		if err = tmpl.Execute(result, context); err == nil {
 			return template.HTML(result.String())
