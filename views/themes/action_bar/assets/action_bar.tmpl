@@ -1,4 +1,3 @@
-{{ if .CurrentUser }}
 <script type='text/javascript'>
   window.qorSwitchMode = function(actionSwitcher) {
     location.href = "/admin/switch_mode?checked=" + actionSwitcher.checked
@@ -7,17 +6,21 @@
 
 <div class="qor-action-bar" style="background-color:rgb(100, 100, 100);width: 100%;height: 60px;">
   <span>Qor</span>
-  <input class="qor-action-switcher" {{if .Checked}}checked{{end}} type="checkbox" onclick="window.qorSwitchMode(this)" />
 
-  <span>Login in as {{.CurrentUser.DisplayName}}</span>
-  <a href="{{.Auth.LogoutURL .Context}}">Logout</a>
+  {{ if .CurrentUser }}
+    <input class="qor-action-switcher" {{if .Checked}}checked{{end}} type="checkbox" onclick="window.qorSwitchMode(this)" />
 
-  {{if .Actions}}
-    <ul>
-      {{range $action := .Actions}}
-        <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
-      {{end}}
-    </ul>
-  {{end}}
+    <span>Login in as {{.CurrentUser.DisplayName}}</span>
+    <a href="{{.Auth.LogoutURL .Context}}">Logout</a>
+
+    {{if .Actions}}
+      <ul>
+        {{ range $action := .Actions }}
+          <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  {{ else }}
+    <a href="{{.Auth.LoginURL .Context}}">Login</a>
+  {{ end }}
 </div>
-{{end}}

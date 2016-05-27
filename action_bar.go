@@ -40,11 +40,6 @@ func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) 
 		file = path.Join(gopath, "src/github.com/qor/action_bar/views/themes/action_bar/assets/action_bar.tmpl")
 	}
 
-	var checked bool
-	if cookie, err := r.Cookie("qor-action-bar"); err == nil {
-		checked = cookie.Value == "true"
-	}
-
 	var result = bytes.NewBufferString("")
 	context := bar.admin.NewContext(w, r)
 	if tmpl, err := template.New(filepath.Base(file)).ParseFiles(file); err == nil {
@@ -55,7 +50,7 @@ func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) 
 			CurrentUser qor.CurrentUser
 			Actions     []*Action
 		}{
-			Checked:     checked,
+			Checked:     bar.IsChecked(w, r),
 			Auth:        bar.auth,
 			Context:     context,
 			CurrentUser: bar.auth.GetCurrentUser(context),
@@ -66,4 +61,15 @@ func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 	return template.HTML("")
+}
+
+func (bar *ActionBar) IsChecked(w http.ResponseWriter, r *http.Request) bool {
+	context := bar.admin.NewContext(w, r)
+	if bar.auth.GetCurrentUser(context) == nil {
+		return false
+	}
+	if cookie, err := r.Cookie("qor-action-bar"); err == nil {
+		return cookie.Value == "true"
+	}
+	return false
 }
