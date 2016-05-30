@@ -1,0 +1,51 @@
+<script type='text/javascript'>
+  $(function (){
+    $('.qor-actionbar__module-button').on('click', function (){
+      setTimeout(function (){
+        window.location.href = "/admin/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
+      },800)
+
+    });
+  })
+
+</script>
+
+<div class="qor-actionbar">
+  <div class="container">
+    <div class="row">
+
+      <div class="qor-actionbar__left">
+        <div class="qor-actionbar__logo"><img src="/images/logo-qor.png" width="45px" /></div>
+        {{ if .CurrentUser }}
+          <div class="qor-actionbar__module">
+            <span class="qor-actionbar__module-preview">PREVIEW</span>
+            <input class='qor-actionbar__module-checkbox' id='cb2' type='checkbox' {{if .Checked}}checked{{end}}>
+            <label class='qor-actionbar__module-button' for='cb2' ></label>
+            <span class="qor-actionbar__module-edit">EDIT</span>
+          </div>
+        {{end}}
+      </div>
+
+      {{ if .CurrentUser }}
+        <div class="qor-actionbar__right">
+          <div class="qor-actionbar__info">
+            <span>Login in as {{.CurrentUser.DisplayName}}</span>
+            <a href="{{.Auth.LogoutURL .Context}}">LOGOUT</a>
+          </div>
+
+          {{if .Actions}}
+            <div class="qor-actionbar__menu">
+              <ul>
+                {{ range $action := .Actions }}
+                  <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
+                {{ end }}
+              </ul>
+            </div>
+          {{ end }}
+        </div>
+      {{ else }}
+        <a class="qor-actionbar__login" href="{{.Auth.LoginURL .Context}}">LOGIN</a></div>
+      {{ end }}
+    </div>
+  </div>
+</div>
