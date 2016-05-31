@@ -35,16 +35,19 @@
 
           {{if .Actions}}
             <div class="qor-actionbar__menu">
-              <ul>
-                {{ range $action := .Actions }}
-                  <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
-                {{ end }}
-              </ul>
+              <label for="qor-actionbar__menu-checkbox">
+                <i class="material-icons">more_vert</i>
+                <ul style="display:none;">
+                  {{ range $action := .Actions }}
+                    <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
+                  {{ end }}
+                </ul>
+              </label>
             </div>
           {{ end }}
         </div>
       {{ else }}
-        <a class="qor-actionbar__login" href="{{.Auth.LoginURL .Context}}">LOGIN</a></div>
+        <a class="qor-actionbar__login" href="{{.Auth.LoginURL .Context}}">LOGIN</a>
       {{ end }}
     </div>
   </div>
