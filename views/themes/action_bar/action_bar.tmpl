@@ -2,9 +2,8 @@
   $(function (){
     $('.qor-actionbar__module-button').on('click', function (){
       setTimeout(function (){
-        window.location.href = "/admin/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
+        window.location.href = {{ .RouterPrefix }} + "/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
       },800)
-
     });
   })
 

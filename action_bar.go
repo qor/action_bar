@@ -44,17 +44,19 @@ func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) 
 	context := bar.admin.NewContext(w, r)
 	if tmpl, err := template.New(filepath.Base(file)).ParseFiles(file); err == nil {
 		context := struct {
-			Checked     bool
-			Auth        admin.Auth
-			Context     *admin.Context
-			CurrentUser qor.CurrentUser
-			Actions     []*Action
+			Checked      bool
+			Auth         admin.Auth
+			Context      *admin.Context
+			CurrentUser  qor.CurrentUser
+			Actions      []*Action
+			RouterPrefix string
 		}{
-			Checked:     bar.IsChecked(w, r),
-			Auth:        bar.auth,
-			Context:     context,
-			CurrentUser: bar.auth.GetCurrentUser(context),
-			Actions:     bar.Actions,
+			Checked:      bar.IsChecked(w, r),
+			Auth:         bar.auth,
+			Context:      context,
+			CurrentUser:  bar.auth.GetCurrentUser(context),
+			Actions:      bar.Actions,
+			RouterPrefix: bar.admin.GetRouter().Prefix,
 		}
 		if err = tmpl.Execute(result, context); err == nil {
 			return template.HTML(result.String())
