@@ -35,9 +35,8 @@ func (bar *ActionBar) RegisterAction(action *Action) {
 func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HTML {
 	context := bar.admin.NewContext(w, r)
 	result := map[string]interface{}{
-		"Checked":      bar.IsChecked(w, r),
+		"EditMode":     bar.EditMode(w, r),
 		"Auth":         bar.auth,
-		"Context":      context,
 		"CurrentUser":  bar.auth.GetCurrentUser(context),
 		"Actions":      bar.Actions,
 		"RouterPrefix": bar.admin.GetRouter().Prefix,
@@ -45,7 +44,7 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 	return context.Render("action_bar", result)
 }
 
-func (bar *ActionBar) IsChecked(w http.ResponseWriter, r *http.Request) bool {
+func (bar *ActionBar) EditMode(w http.ResponseWriter, r *http.Request) bool {
 	context := bar.admin.NewContext(w, r)
 	if bar.auth.GetCurrentUser(context) == nil {
 		return false
