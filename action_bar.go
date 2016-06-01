@@ -2,14 +2,15 @@ package action_bar
 
 import (
 	"bytes"
-	"github.com/qor/admin"
-	"github.com/qor/qor"
 	"html/template"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/qor/admin"
+	"github.com/qor/qor"
 )
 
 type ActionBar struct {
@@ -29,13 +30,13 @@ func init() {
 	if path := os.Getenv("WEB_ROOT"); path != "" {
 		root = path
 	}
+	admin.RegisterViewPath("github.com/qor/action_bar/views")
 }
 
 func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
 	bar := &ActionBar{admin: admin, auth: auth}
 	router := admin.GetRouter()
 	router.Get("/switch_mode", SwitchMode)
-	admin.RegisterViewPath("github.com/qor/action_bar/views")
 	return bar
 }
 
