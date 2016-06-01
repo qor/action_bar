@@ -23,6 +23,14 @@ type Action struct {
 	Link string
 }
 
+var root = "."
+
+func init() {
+	if path := os.Getenv("WEB_ROOT"); path != "" {
+		root = path
+	}
+}
+
 func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
 	bar := &ActionBar{admin: admin, auth: auth}
 	router := admin.GetRouter()
@@ -36,8 +44,12 @@ func (bar *ActionBar) RegisterAction(action *Action) {
 
 func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) template.HTML {
 	var file string
-	for _, gopath := range strings.Split(os.Getenv("GOPATH"), ":") {
-		file = path.Join(gopath, "src/github.com/qor/action_bar/views/themes/action_bar/action_bar.tmpl")
+
+	file = filepath.Join(root, "vendor", "github.com/qor/action_bar/views/themes/action_bar/action_bar.tmpl")
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		for _, gopath := range strings.Split(os.Getenv("GOPATH"), ":") {
+			file = path.Join(gopath, "src/github.com/qor/action_bar/views/themes/action_bar/action_bar.tmpl")
+		}
 	}
 
 	var result = bytes.NewBufferString("")
