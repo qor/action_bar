@@ -1,16 +1,10 @@
 package action_bar
 
 import (
-	"bytes"
 	"html/template"
 	"net/http"
-	"os"
-	"path"
-	"path/filepath"
-	"strings"
 
 	"github.com/qor/admin"
-	"github.com/qor/qor"
 )
 
 type ActionBar struct {
@@ -24,19 +18,13 @@ type Action struct {
 	Link string
 }
 
-var root = "."
-
 func init() {
-	if path := os.Getenv("WEB_ROOT"); path != "" {
-		root = path
-	}
 	admin.RegisterViewPath("github.com/qor/action_bar/views")
 }
 
 func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
 	bar := &ActionBar{admin: admin, auth: auth}
-	router := admin.GetRouter()
-	router.Get("/switch_mode", SwitchMode)
+	admin.GetRouter().Get("/action_bar/switch_mode", SwitchMode)
 	return bar
 }
 
@@ -45,30 +33,16 @@ func (bar *ActionBar) RegisterAction(action *Action) {
 }
 
 func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HTML {
-	var result = bytes.NewBufferString("")
 	context := bar.admin.NewContext(w, r)
-	file := appendPackageToPath("views/themes/action_bar/action_bar.tmpl")
-	if tmpl, err := template.New(filepath.Base(file)).ParseFiles(file); err == nil {
-		context := struct {
-			Checked      bool
-			Auth         admin.Auth
-			Context      *admin.Context
-			CurrentUser  qor.CurrentUser
-			Actions      []*Action
-			RouterPrefix string
-		}{
-			Checked:      bar.IsChecked(w, r),
-			Auth:         bar.auth,
-			Context:      context,
-			CurrentUser:  bar.auth.GetCurrentUser(context),
-			Actions:      bar.Actions,
-			RouterPrefix: bar.admin.GetRouter().Prefix,
-		}
-		if err = tmpl.Execute(result, context); err == nil {
-			return template.HTML(result.String())
-		}
+	result := map[string]interface{}{
+		"Checked":      bar.IsChecked(w, r),
+		"Auth":         bar.auth,
+		"Context":      context,
+		"CurrentUser":  bar.auth.GetCurrentUser(context),
+		"Actions":      bar.Actions,
+		"RouterPrefix": bar.admin.GetRouter().Prefix,
 	}
-	return template.HTML("")
+	return context.Render("action_bar", result)
 }
 
 func (bar *ActionBar) IsChecked(w http.ResponseWriter, r *http.Request) bool {
@@ -80,16 +54,4 @@ func (bar *ActionBar) IsChecked(w http.ResponseWriter, r *http.Request) bool {
 		return cookie.Value == "true"
 	}
 	return false
-}
-
-func appendPackageToPath(f string) string {
-	var file string
-
-	file = filepath.Join(root, "vendor", "github.com/qor/action_bar/"+f)
-	if _, err := os.Stat(file); os.IsNotExist(err) {
-		for _, gopath := range strings.Split(os.Getenv("GOPATH"), ":") {
-			file = path.Join(gopath, "src/github.com/qor/action_bar/"+f)
-		}
-	}
-	return file
 }
