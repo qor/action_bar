@@ -44,7 +44,7 @@ func (bar *ActionBar) RegisterAction(action *Action) {
 	bar.Actions = append(bar.Actions, action)
 }
 
-func (bar *ActionBar) RenderIncludedTag(w http.ResponseWriter, r *http.Request) template.HTML {
+func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HTML {
 	var result = bytes.NewBufferString("")
 	context := bar.admin.NewContext(w, r)
 	file := appendPackageToPath("views/themes/action_bar/action_bar.tmpl")
