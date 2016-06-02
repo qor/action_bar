@@ -90,12 +90,12 @@
     }
 
     @at-root #{&}__module{
-        > span{
+        > a{
             display: inline-block;
             vertical-align: middle;
             cursor: pointer;
-            &.qor-actionbar__module-edit{
-                color: #33c3f0;
+            &.qor-actionbar__module-preview{
+                color: #fff;
             }
         }
     }

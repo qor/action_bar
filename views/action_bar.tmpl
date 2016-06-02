@@ -29,10 +29,10 @@
         <div class="qor-actionbar__logo"><img src="/images/logo-qor.png" width="45px" /></div>
         {{ if .CurrentUser }}
           <div class="qor-actionbar__module">
-            <span class="qor-actionbar__module-preview">PREVIEW</span>
+            <a class="qor-actionbar__module-preview">PREVIEW</a>
             <input class='qor-actionbar__module-checkbox' id='cb2' type='checkbox' {{if .EditMode}}checked{{end}}>
             <label class='qor-actionbar__module-button' for='cb2' ></label>
-            <span class="qor-actionbar__module-edit">EDIT</span>
+            <a class="qor-actionbar__module-edit">EDIT</a>
           </div>
         {{end}}
       </div>
