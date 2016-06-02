@@ -1,5 +1,3 @@
-{{$context := .}}
-{{with .Result}}
 <link type="text/css" rel="stylesheet" href="{{ .RouterPrefix }}/assets/stylesheets/action_bar.css?theme=action_bar">
 
 <script type='text/javascript'>
@@ -14,7 +12,7 @@
 
     $('.qor-actionbar__module-checkbox').on('change', function (){
       setTimeout(function (){
-        window.location.href = {{ .RouterPrefix }} + "/action_bar/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
+        window.location.href = {{ .RouterPrefix }} + "/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
       },800)
     });
   })
@@ -30,7 +28,7 @@
         {{ if .CurrentUser }}
           <div class="qor-actionbar__module">
             <span class="qor-actionbar__module-preview">PREVIEW</span>
-            <input class='qor-actionbar__module-checkbox' id='cb2' type='checkbox' {{if .EditMode}}checked{{end}}>
+            <input class='qor-actionbar__module-checkbox' id='cb2' type='checkbox' {{if .Checked}}checked{{end}}>
             <label class='qor-actionbar__module-button' for='cb2' ></label>
             <span class="qor-actionbar__module-edit">EDIT</span>
           </div>
@@ -41,7 +39,7 @@
         <div class="qor-actionbar__right">
           <div class="qor-actionbar__info">
             <span>Logged in as {{.CurrentUser.DisplayName}}</span>
-            <a href="{{.Auth.LogoutURL $context}}">LOGOUT</a>
+            <a href="{{.Auth.LogoutURL .Context}}">LOGOUT</a>
           </div>
 
           {{if .Actions}}
@@ -58,9 +56,8 @@
           {{ end }}
         </div>
       {{ else }}
-        <a class="qor-actionbar__login" href="{{.Auth.LoginURL $context}}">LOGIN</a>
+        <a class="qor-actionbar__login" href="{{.Auth.LoginURL .Context}}">LOGIN</a>
       {{ end }}
     </div>
   </div>
 </div>
-{{end}}

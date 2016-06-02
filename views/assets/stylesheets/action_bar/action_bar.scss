@@ -4,6 +4,7 @@
     background-color: #3b3b3b;
     color: #fff;
     font-size: 12px;
+    font-family: 'Roboto', 'Helvetica Neue',Helvetica,Arial,sans-serif;
     a{
         color: #33c3f0;
         text-decoration: none;
@@ -19,7 +20,7 @@
         float: left;
         > div{
             float: left;
-            margin-right: 16px;
+            margin-right: 24px;
         }
     }
     @at-root #{&}__info{
@@ -84,7 +85,7 @@
     }
     @at-root #{&}__logo{
         img{
-            margin: 5px 0 0;
+            margin: 7px 0 0;
         }
     }
 
@@ -92,6 +93,7 @@
         > span{
             display: inline-block;
             vertical-align: middle;
+            cursor: pointer;
             &.qor-actionbar__module-edit{
                 color: #33c3f0;
             }
