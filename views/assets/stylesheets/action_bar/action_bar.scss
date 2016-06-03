@@ -1,6 +1,5 @@
 .qor-actionbar{
     height: 32px;
-    line-height: 32px;
     background-color: #3b3b3b;
     color: #fff;
     font-size: 12px;
@@ -8,6 +7,9 @@
     a{
         color: #33c3f0;
         text-decoration: none;
+        display: inline-block;
+        line-height: 32px;
+        height: 32px;
     }
     @at-root #{&}__right{
         float: right;
@@ -69,9 +71,9 @@
         label{
             display: inline-block;
             width: 24px;
-            height: 24px;
+            height: 22px;
             text-align: center;
-            line-height: 24px;
+            line-height: 22px;
             border-radius: 2em;
             margin-top: 4px;
             cursor: pointer;
