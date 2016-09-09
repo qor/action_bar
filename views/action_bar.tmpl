@@ -1,5 +1,6 @@
 {{$context := .}}
 {{with .Result}}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="{{ .RouterPrefix }}/assets/stylesheets/action_bar.css?theme=action_bar">
 
 <script type='text/javascript'>
@@ -22,9 +23,7 @@
 </script>
 
 <div class="qor-actionbar">
-  <div class="container">
-    <div class="row">
-
+  <div class="qor-actionbar--container">
       <div class="qor-actionbar__left">
         <div class="qor-actionbar__logo"><img src="/images/logo-qor.png" width="45px" /></div>
         {{ if .CurrentUser }}
@@ -60,7 +59,6 @@
       {{ else }}
         <a class="qor-actionbar__login" href="{{.Auth.LoginURL $context}}">LOGIN</a>
       {{ end }}
-    </div>
   </div>
 </div>
 {{end}}

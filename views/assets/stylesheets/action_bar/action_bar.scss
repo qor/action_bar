@@ -4,6 +4,10 @@
     color: #fff;
     font-size: 12px;
     font-family: 'Roboto', 'Helvetica Neue',Helvetica,Arial,sans-serif;
+    .qor-actionbar--container{
+        width: 960px;
+        margin:  0 auto;
+    }
     a{
         color: #33c3f0;
         text-decoration: none;
@@ -36,7 +40,6 @@
                 label{
                     background-color: rgba(255, 255, 255, .2);
                 }
-
             }
         }
     }
@@ -46,7 +49,8 @@
             ul {
                 position: absolute;
                 z-index: 9999;
-                top: 32px;
+                top: 31px;
+                margin: 0;
                 right: 0;
                 min-width: 180px;
                 background-color: #fff;
@@ -96,8 +100,13 @@
             display: inline-block;
             vertical-align: middle;
             cursor: pointer;
+
+            &.qor-actionbar__module-edit{
+                padding-left: 8px;
+            }
             &.qor-actionbar__module-preview{
                 color: #fff;
+                padding-right: 8px;
             }
         }
     }
@@ -116,7 +125,7 @@
             outline: 0;
             display: inline-block;
             vertical-align: middle;
-            margin: 0 8px;
+            margin: 0;
             width: 34px;
             height: 14px;
             position: relative;
