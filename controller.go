@@ -1,6 +1,7 @@
 package action_bar
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -23,8 +24,10 @@ func SwitchMode(context *admin.Context) {
 func (bar *ActionBar) FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{}
 
-	funcMap["render_edit_button"] = func(widgetName string, widgetGroupName ...string) template.HTML {
-		return template.HTML(`<a target="blank" href="/admin/widget_contents/FeatureProducts/edit?widget_scope=default" class="qor-actionbar-button">Edit</a>`)
+	funcMap["render_edit_button"] = func(value interface{}, resources ...*admin.Resource) template.HTML {
+		context := bar.admin.NewContext(nil, nil)
+		url := context.URLFor(value, resources...)
+		return template.HTML(fmt.Sprintf(`<a target="blank" href="%v/edit" class="qor-actionbar-button">Edit</a>`, url))
 	}
 
 	return funcMap
