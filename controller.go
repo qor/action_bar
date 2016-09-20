@@ -1,6 +1,7 @@
 package action_bar
 
 import (
+	"html/template"
 	"net/http"
 
 	"github.com/qor/admin"
@@ -17,4 +18,14 @@ func SwitchMode(context *admin.Context) {
 	}
 
 	http.Redirect(context.Writer, context.Request, referrer, http.StatusFound)
+}
+
+func (bar *ActionBar) FuncMap() template.FuncMap {
+	funcMap := template.FuncMap{}
+
+	funcMap["render_edit_button"] = func(widgetName string, widgetGroupName ...string) template.HTML {
+		return template.HTML(`<a target="blank" href="/admin/widget_contents/FeatureProducts/edit?widget_scope=default" class="qor-actionbar-button">Edit</a>`)
+	}
+
+	return funcMap
 }
