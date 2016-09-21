@@ -21,13 +21,17 @@ func SwitchMode(context *admin.Context) {
 	http.Redirect(context.Writer, context.Request, referrer, http.StatusFound)
 }
 
-func (bar *ActionBar) FuncMap() template.FuncMap {
+// FuncMap will return helper to render inline edit button
+func (bar *ActionBar) FuncMap(w http.ResponseWriter, r *http.Request) template.FuncMap {
 	funcMap := template.FuncMap{}
 
 	funcMap["render_edit_button"] = func(value interface{}, resources ...*admin.Resource) template.HTML {
-		context := bar.admin.NewContext(nil, nil)
-		url := context.URLFor(value, resources...)
-		return template.HTML(fmt.Sprintf(`<a target="blank" href="%v/edit" class="qor-actionbar-button">Edit</a>`, url))
+		if bar.EditMode(w, r) {
+			context := bar.admin.NewContext(nil, nil)
+			url := context.URLFor(value, resources...)
+			return template.HTML(fmt.Sprintf(`<a target="blank" href="%v/edit" class="qor-actionbar-button">Edit</a>`, url))
+		}
+		return template.HTML("")
 	}
 
 	return funcMap
