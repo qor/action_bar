@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <!--
+    ,-----.    ,-----.  ,------.
+    '  .-.  '  '  .-.  ' |  .--. '
+    |  | |  |  |  | |  | |  '--'.'
+    '  '-'  '-.'  '-'  ' |  |\  \
+    `-----'--' `-----'  `--' '--'
+    ENTERPRISE CONTENT MANAGEMENT SYSTEM
+  -->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylesheets -->
+    {{stylesheet_tag "vendors" "qor" "app"}}
+    {{load_admin_stylesheets}}
+    {{load_theme_stylesheets}}
+    {{javascript_tag "vendors/jquery.min"}}
+  </head>
+
+  <body class="qor-theme-slideout" style="background-color: rgba(0, 0, 0, 0.5);border:none;">
+    <a style="display:none;" class="js-actionbar-edit-link">{{t "qor_actionbar.form.edit" "Edit Action Bar"}}</a>
+
+    <!-- JavaScripts -->
+    {{javascript_tag "vendors" "qor" "app"}}
+    {{load_admin_javascripts}}
+    {{load_theme_javascripts}}
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+          function closeActionBarEditBox() {
+            setTimeout(function() {
+              window.parent.document.getElementById('qor-actionbar-iframe').classList.remove("show");
+              window.parent.document.querySelector('body').classList.remove("open-actionbar-editor");
+            }, 350);
+          }
+
+          // Reload parent window when click form submitted
+          $('.qor-theme-slideout').on('slideoutSubmitComplete.qor.slideout' , function() {
+            setTimeout(function() {
+              parent.window.location.reload();
+            }, 300);
+          });
+
+        $(document).on('keyup', function(e) {
+          if (e.keyCode === 27) {
+            closeActionBarEditBox();
+          }
+        }).on("click", ".qor-button--cancel, .qor-slideout__close", function() {
+          closeActionBarEditBox();
+        });
+
+
+      });
+    </script>
+  </body>
+</html>

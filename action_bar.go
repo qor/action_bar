@@ -1,9 +1,10 @@
 package action_bar
 
 import (
-	"github.com/qor/admin"
 	"html/template"
 	"net/http"
+
+	"github.com/qor/admin"
 )
 
 // ActionBar stores configuration about a action bar.
@@ -27,6 +28,7 @@ func init() {
 func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
 	bar := &ActionBar{admin: admin, auth: auth}
 	admin.GetRouter().Get("/action_bar/switch_mode", SwitchMode)
+	admin.GetRouter().Get("/action_bar/inline-edit", InlineEdit)
 	return bar
 }
 
