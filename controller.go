@@ -21,6 +21,7 @@ func SwitchMode(context *admin.Context) {
 	http.Redirect(context.Writer, context.Request, referrer, http.StatusFound)
 }
 
+// InlineEdit using to make inline edit resource shown as slideout
 func InlineEdit(context *admin.Context) {
 	context.Writer.Write([]byte(context.Render("inline_edit")))
 }

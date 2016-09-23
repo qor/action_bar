@@ -24,6 +24,13 @@ func main() {
 
   // Then use Render to render action bar in view
   ActionBar.Render(writer, request)
+
+  // Make resource able be edit in frontend directly
+  // 1. Add action_bar funcmap to view
+  //    ActionBar.FuncMap(writer, request)
+  // 2. Using funcmap render_edit_button in template
+  //    {{ render_edit_button .Product }}
+  // 3. then you will see a `Edit` button in product show page and user could edit product' info in frontend
 }
 
 ```
