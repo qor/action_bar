@@ -122,3 +122,20 @@ func TestInilneMode(t *testing.T) {
 		t.Errorf(color.RedString("Should have inline edit button"))
 	}
 }
+
+func TestRegisterAction(t *testing.T) {
+	bow := surf.NewBrowser()
+
+	// Default should not have inline edit button
+	bow.Open(Server.URL + "/")
+	if bow.Find(".qor-actionbar__menu").Length() != 0 {
+		t.Errorf(color.RedString("Should don't have additional actions"))
+	}
+
+	// Default should not have inline edit button
+	actionBar.RegisterAction(&Action{Name: "Admin Dashboard", Link: "/admin"})
+	bow.Open(Server.URL + "/")
+	if bow.Find(".qor-actionbar__menu").Length() == 0 {
+		t.Errorf(color.RedString("Should have additional actions"))
+	}
+}
