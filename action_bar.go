@@ -47,7 +47,7 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 		"Actions":      bar.Actions,
 		"RouterPrefix": bar.admin.GetRouter().Prefix,
 	}
-	return context.Render("action_bar", result)
+	return context.Render("action_bar/action_bar", result)
 }
 
 // EditMode return whether current mode is `Preview` or `Edit`
