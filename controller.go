@@ -23,7 +23,7 @@ func SwitchMode(context *admin.Context) {
 
 // InlineEdit using to make inline edit resource shown as slideout
 func InlineEdit(context *admin.Context) {
-	context.Writer.Write([]byte(context.Render("inline_edit")))
+	context.Writer.Write([]byte(context.Render("action_bar_inline_edit")))
 }
 
 // FuncMap will return helper to render inline edit button
