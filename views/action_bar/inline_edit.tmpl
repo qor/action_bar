@@ -37,6 +37,11 @@
             }, 350);
           }
 
+          // If reload iframe by action button
+          if ($(this).width() > 1) {
+            closeActionBarEditBox();
+          }
+
           // Reload parent window when click form submitted
           $('.qor-theme-slideout').on('slideoutSubmitComplete.qor.slideout' , function() {
             setTimeout(function() {
@@ -44,15 +49,13 @@
             }, 300);
           });
 
-        $(document).on('keyup', function(e) {
-          if (e.keyCode === 27) {
+          $(document).on('keyup', function(e) {
+            if (e.keyCode === 27) {
+              closeActionBarEditBox();
+            }
+          }).on("click", ".qor-button--cancel, .qor-slideout__close", function() {
             closeActionBarEditBox();
-          }
-        }).on("click", ".qor-button--cancel, .qor-slideout__close", function() {
-          closeActionBarEditBox();
-        });
-
-
+          });
       });
     </script>
   </body>
