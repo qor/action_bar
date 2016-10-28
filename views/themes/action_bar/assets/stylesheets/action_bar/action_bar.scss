@@ -206,6 +206,10 @@
 }
 
 @media only screen and (max-width: 767px){
+    .qor-actionbar .qor-actionbar--container{
+        width: calc(100% - 16px);
+        padding: 0 8px;
+    }
     .qor-actionbar__right .qor-actionbar__info span{
         display: none;
     }
