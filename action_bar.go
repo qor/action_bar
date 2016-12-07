@@ -10,7 +10,6 @@ import (
 // ActionBar stores configuration about a action bar.
 type ActionBar struct {
 	admin   *admin.Admin
-	auth    admin.Auth
 	Actions []*Action
 }
 
@@ -25,10 +24,10 @@ func init() {
 }
 
 // New will create a ActionBar object
-func New(admin *admin.Admin, auth admin.Auth) *ActionBar {
-	bar := &ActionBar{admin: admin, auth: auth}
+func New(admin *admin.Admin) *ActionBar {
+	bar := &ActionBar{admin: admin}
 	admin.GetRouter().Get("/action_bar/switch_mode", SwitchMode)
-	admin.GetRouter().Get("/action_bar/inline-edit", InlineEdit)
+	admin.GetRouter().Get("/action_bar/inline_edit", InlineEdit)
 	return bar
 }
 
@@ -42,8 +41,8 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 	context := bar.admin.NewContext(w, r)
 	result := map[string]interface{}{
 		"EditMode":     bar.EditMode(w, r),
-		"Auth":         bar.auth,
-		"CurrentUser":  bar.auth.GetCurrentUser(context),
+		"Auth":         bar.admin.Auth,
+		"CurrentUser":  bar.admin.Auth.GetCurrentUser(context),
 		"Actions":      bar.Actions,
 		"RouterPrefix": bar.admin.GetRouter().Prefix,
 	}
@@ -53,7 +52,7 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 // EditMode return whether current mode is `Preview` or `Edit`
 func (bar *ActionBar) EditMode(w http.ResponseWriter, r *http.Request) bool {
 	context := bar.admin.NewContext(w, r)
-	if bar.auth.GetCurrentUser(context) == nil {
+	if bar.admin.Auth.GetCurrentUser(context) == nil {
 		return false
 	}
 	if cookie, err := r.Cookie("qor-action-bar"); err == nil {

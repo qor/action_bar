@@ -32,12 +32,15 @@ func (bar *ActionBar) FuncMap(w http.ResponseWriter, r *http.Request) template.F
 
 	funcMap["render_edit_button"] = func(value interface{}, resources ...*admin.Resource) template.HTML {
 		if bar.EditMode(w, r) {
-			context := bar.admin.NewContext(nil, nil)
-			url, _ := utils.JoinURL(context.URLFor(value, resources...), "edit")
-			prefix := bar.admin.GetRouter().Prefix
-			js := fmt.Sprintf("<script data-prefix=\"%v\" src=\"%v/assets/javascripts/action_bar_check.js?theme=action_bar\"></script>", prefix, prefix)
-			frameURL := fmt.Sprintf("%v/action_bar/inline-edit", prefix)
-			return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">Edit</a>`, js, frameURL, url))
+			var (
+				context    = bar.admin.NewContext(w, r)
+				prefix     = bar.admin.GetRouter().Prefix
+				editURL, _ = utils.JoinURL(context.URLFor(value, resources...), "edit")
+				jsURL      = fmt.Sprintf("<script data-prefix=\"%v\" src=\"%v/assets/javascripts/action_bar_check.js?theme=action_bar\"></script>", prefix, prefix)
+				frameURL   = fmt.Sprintf("%v/action_bar/inline_edit", prefix)
+			)
+
+			return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">Edit</a>`, jsURL, frameURL, editURL))
 		}
 		return template.HTML("")
 	}
