@@ -68,10 +68,11 @@ func init() {
 	db := utils.TestDB()
 	Server = httptest.NewServer(mux)
 	Admin := admin.New(&qor.Config{DB: db})
+	Admin.SetAuth(AdminAuth{})
 	Admin.MountTo("/admin", mux)
 	Admin.AddResource(User{})
 
-	actionBar = New(Admin, AdminAuth{})
+	actionBar = New(Admin)
 }
 
 func TestAuth(t *testing.T) {
