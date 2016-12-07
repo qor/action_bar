@@ -40,7 +40,7 @@ func (bar *ActionBar) FuncMap(w http.ResponseWriter, r *http.Request) template.F
 				frameURL   = fmt.Sprintf("%v/action_bar/inline_edit", prefix)
 			)
 
-			return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">Edit</a>`, jsURL, frameURL, editURL))
+			return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">%v</a>`, jsURL, frameURL, editURL, bar.admin.T(context.Context, "qor_action_bar.action.edit", "Edit")))
 		}
 		return template.HTML("")
 	}

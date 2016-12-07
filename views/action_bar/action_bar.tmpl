@@ -1,37 +1,36 @@
 {{$context := .}}
 {{with .Result}}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="{{ .RouterPrefix }}/assets/stylesheets/action_bar.css?theme=action_bar">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="{{ .RouterPrefix }}/assets/stylesheets/action_bar.css?theme=action_bar">
 
-<script type='text/javascript'>
-  $(function (){
-    $('.qor-actionbar__module-edit').on('click', function (){
-      $('.qor-actionbar__module-checkbox').prop('checked',true).trigger('change');
-    });
+  <script type='text/javascript'>
+    $(function (){
+      $('.qor-actionbar__module-edit').on('click', function (){
+        $('.qor-actionbar__module-checkbox').prop('checked',true).trigger('change');
+      });
 
-    $('.qor-actionbar__module-preview').on('click', function (){
-      $('.qor-actionbar__module-checkbox').prop('checked',false).trigger('change');
-    });
+      $('.qor-actionbar__module-preview').on('click', function (){
+        $('.qor-actionbar__module-checkbox').prop('checked',false).trigger('change');
+      });
 
-    $('.qor-actionbar__module-checkbox').on('change', function (){
-      setTimeout(function (){
-        window.location.href = {{ .RouterPrefix }} + "/action_bar/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
-      },800)
-    });
-  })
+      $('.qor-actionbar__module-checkbox').on('change', function (){
+        setTimeout(function (){
+          window.location.href = {{ .RouterPrefix }} + "/action_bar/switch_mode?checked=" + $('.qor-actionbar__module-checkbox').prop('checked');
+        },800)
+      });
+    })
+  </script>
 
-</script>
-
-<div class="qor-actionbar">
-  <div class="qor-actionbar--container">
+  <div class="qor-actionbar">
+    <div class="qor-actionbar--container">
       <div class="qor-actionbar__left">
         <div class="qor-actionbar__logo"><img src="{{.RouterPrefix}}/assets/images/logo-qor.png?theme=action_bar" width="45px" /></div>
         {{ if .CurrentUser }}
           <div class="qor-actionbar__module">
-            <a class="qor-actionbar__module-preview">PREVIEW</a>
+            <a class="qor-actionbar__module-preview">{{t "qor_action_bar.action.preview" "PREVIEW"}}</a>
             <input class='qor-actionbar__module-checkbox' id='cb2' type='checkbox' {{if .EditMode}}checked{{end}}>
             <label class='qor-actionbar__module-button' for='cb2' ></label>
-            <a class="qor-actionbar__module-edit">EDIT</a>
+            <a class="qor-actionbar__module-edit">{{t "qor_action_bar.action.edit" "EDIT"}}</a>
           </div>
         {{end}}
       </div>
@@ -39,8 +38,8 @@
       {{ if .CurrentUser }}
         <div class="qor-actionbar__right">
           <div class="qor-actionbar__info">
-            <span>Logged in as {{.CurrentUser.DisplayName}}</span>
-            <a href="{{.Auth.LogoutURL $context}}">LOGOUT</a>
+            <span>{{t "qor_action_bar.action.logged_as" "Logged in as {{.DisplayName}}" .CurrentUser}}</span>
+            <a href="{{.Auth.LogoutURL $context}}">{{t "qor_action_bar.action.logout" "Logout"}}</a>
           </div>
 
           {{if .Actions}}
@@ -49,7 +48,7 @@
                 <i class="material-icons">more_vert</i>
                 <ul style="display:none;">
                   {{ range $action := .Actions }}
-                    <li><a href="{{$action.Link}}">{{$action.Name}}</a></li>
+                    <li><a href="{{$action.Link}}">{{t (printf "qor_action_bar.action.%v" $action.Name) $action.Name}}</a></li>
                   {{ end }}
                 </ul>
               </label>
@@ -57,8 +56,8 @@
           {{ end }}
         </div>
       {{ else }}
-        <a class="qor-actionbar__login" href="{{.Auth.LoginURL $context}}">LOGIN</a>
+        <a class="qor-actionbar__login" href="{{.Auth.LoginURL $context}}">{{t "qor_action_bar.action.login" "Login"}}</a>
       {{ end }}
+    </div>
   </div>
-</div>
 {{end}}
