@@ -61,7 +61,7 @@ func init() {
 			ActionBar   template.HTML
 			CurrentUser *User
 		}{
-			ActionBar:   actionBar.Render(w, req),
+			ActionBar:   actionBar.Render(w, req, Config{InlineActions: []string{"<a href='/edit_widget'>Edit Widget</a>"}}),
 			CurrentUser: CurrentUser,
 		})
 	})
@@ -138,5 +138,19 @@ func TestRegisterAction(t *testing.T) {
 	bow.Open(Server.URL + "/")
 	if bow.Find(".qor-actionbar__menu").Length() == 0 {
 		t.Errorf(color.RedString("Should have additional actions"))
+	}
+}
+
+func TestInlineActions(t *testing.T) {
+	bow := surf.NewBrowser()
+
+	// Default should not have inline edit button
+	bow.Open(Server.URL + "/")
+	if bow.Find(".qor-inline-actions .qor-action").Length() != 1 {
+		t.Errorf(color.RedString("Should display inline actions"))
+	}
+
+	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit Widget" {
+		t.Errorf(color.RedString("Should display correct inline action's content"))
 	}
 }

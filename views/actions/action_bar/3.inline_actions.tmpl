@@ -1,0 +1,17 @@
+<style>
+  .qor-inline-actions {
+    float: left;
+  }
+  .qor-inline-actions a {
+    line-height: 32px;
+  }
+</style>
+{{with .Result}}
+  <div class="qor-inline-actions">
+    {{range $inline_action := .InlineActions }}
+      <div class="qor-action">
+        {{raw $inline_action}}
+      </div>
+    {{end}}
+  </div>
+{{end}}

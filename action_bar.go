@@ -13,6 +13,12 @@ type ActionBar struct {
 	Actions []*Action
 }
 
+// Config stores configuration for a render
+type Config struct {
+	// some inline edit actions that will placed on the bar
+	InlineActions []string
+}
+
 // Action define a addition action(link), will append to the top-right menu.
 type Action struct {
 	Name string
@@ -37,7 +43,7 @@ func (bar *ActionBar) RegisterAction(action *Action) {
 }
 
 // Render will return the HTML of the bar, used this function to render the bar in frontend page's template or layout
-func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HTML {
+func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request, configs ...Config) template.HTML {
 	context := bar.admin.NewContext(w, r)
 	result := map[string]interface{}{
 		"EditMode":     bar.EditMode(w, r),
@@ -45,6 +51,9 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 		"CurrentUser":  bar.admin.Auth.GetCurrentUser(context),
 		"Actions":      bar.Actions,
 		"RouterPrefix": bar.admin.GetRouter().Prefix,
+	}
+	if len(configs) > 0 {
+		result["InlineActions"] = configs[0].InlineActions
 	}
 	return context.Render("action_bar/action_bar", result)
 }
