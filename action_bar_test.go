@@ -61,7 +61,7 @@ func init() {
 			ActionBar   template.HTML
 			CurrentUser *User
 		}{
-			ActionBar:   actionBar.Render(w, req, Config{InlineActions: []string{"<a href='/edit_widget'>Edit Widget</a>"}}),
+			ActionBar:   actionBar.Render(w, req, Config{InlineActions: []template.HTML{template.HTML("<a href='/edit_widget'>Edit Widget</a>")}}),
 			CurrentUser: CurrentUser,
 		})
 	})

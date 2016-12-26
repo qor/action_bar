@@ -2,6 +2,9 @@
   .qor-inline-actions {
     float: left;
   }
+  .qor-inline-actions .qor-action {
+    margin-right: 10px;
+  }
   .qor-inline-actions a {
     line-height: 32px;
   }
@@ -10,7 +13,7 @@
   <div class="qor-inline-actions">
     {{range $inline_action := .InlineActions }}
       <div class="qor-action">
-        {{raw $inline_action}}
+        {{$inline_action}}
       </div>
     {{end}}
   </div>

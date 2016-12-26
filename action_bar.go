@@ -16,7 +16,7 @@ type ActionBar struct {
 // Config stores configuration for a render
 type Config struct {
 	// some inline edit actions that will placed on the bar
-	InlineActions []string
+	InlineActions []template.HTML
 }
 
 // Action define a addition action(link), will append to the top-right menu.
