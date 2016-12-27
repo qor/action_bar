@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"reflect"
+	"strings"
 
 	"github.com/qor/admin"
 	"github.com/qor/qor/utils"
@@ -36,7 +38,11 @@ func (bar *ActionBar) RenderEditButton(w http.ResponseWriter, r *http.Request, v
 			frameURL   = fmt.Sprintf("%v/action_bar/inline_edit", prefix)
 		)
 
-		return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">%v</a>`, jsURL, frameURL, editURL, bar.admin.T(context.Context, "qor_action_bar.action.edit", "Edit")))
+		resourceName := "Resource"
+		if res := bar.admin.GetResource(reflect.Indirect(reflect.ValueOf(value)).Type().String()); res != nil {
+			resourceName = strings.ToUpper(res.Name)
+		}
+		return template.HTML(fmt.Sprintf(`%v<a target="blank" data-iframe-url="%v" data-url="%v" href="#" class="qor-actionbar-button">%v</a>`, jsURL, frameURL, editURL, bar.admin.T(context.Context, "qor_action_bar.action.edit_resource", "Edit {{$1}}", resourceName)))
 	}
 	return template.HTML("")
 }

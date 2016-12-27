@@ -57,11 +57,13 @@ func init() {
 		if err != nil {
 			fmt.Printf("Execute template have error %v\n", err)
 		}
+		CurrentUser = &User{Name: "Admin", Role: "admin"}
+		editUserButton := actionBar.RenderEditButton(w, req, CurrentUser)
 		tmpl.Execute(w, struct {
 			ActionBar   template.HTML
 			CurrentUser *User
 		}{
-			ActionBar:   actionBar.Render(w, req, Config{InlineActions: []template.HTML{template.HTML("<a href='/edit_widget'>Edit Widget</a>")}}),
+			ActionBar:   actionBar.Render(w, req, Config{InlineActions: []template.HTML{template.HTML("<a href='/edit_widget'>Edit Widget</a>"), editUserButton}}),
 			CurrentUser: CurrentUser,
 		})
 	})
@@ -146,11 +148,12 @@ func TestInlineActions(t *testing.T) {
 
 	// Default should not have inline edit button
 	bow.Open(Server.URL + "/")
-	if bow.Find(".qor-inline-actions .qor-action").Length() != 1 {
-		t.Errorf(color.RedString("Should display inline actions"))
+	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit Widget" {
+		t.Errorf(color.RedString("Should only display 'Edit Widget' action if doesn't turn on inline-edit"))
 	}
 
-	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit Widget" {
-		t.Errorf(color.RedString("Should display correct inline action's content"))
+	bow.Open(Server.URL + "/admin/action_bar/switch_mode?checked=true")
+	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit WidgetEdit USER" {
+		t.Errorf(color.RedString("Should display both 'Edit Widget' and 'Edit USER' if turn on inline-edit"))
 	}
 }
