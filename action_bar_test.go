@@ -57,7 +57,6 @@ func init() {
 		if err != nil {
 			fmt.Printf("Execute template have error %v\n", err)
 		}
-		CurrentUser = &User{Name: "Admin", Role: "admin"}
 		editUserButton := actionBar.RenderEditButton(w, req, CurrentUser)
 		tmpl.Execute(w, struct {
 			ActionBar   template.HTML
