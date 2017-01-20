@@ -153,7 +153,7 @@ func TestInlineActions(t *testing.T) {
 	}
 
 	bow.Open(Server.URL + "/admin/action_bar/switch_mode?checked=true")
-	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit WidgetEdit USEREdit SEO" {
-		t.Errorf(color.RedString("Should display both 'Edit Widget' and 'Edit USER' if turn on inline-edit"))
+	if bow.Find(".qor-inline-actions .qor-action a").Text() != "Edit WidgetEdit UserEdit SEO" {
+		t.Errorf(color.RedString("Should display both 'Edit Widget' and 'Edit User' if turn on inline-edit"))
 	}
 }
