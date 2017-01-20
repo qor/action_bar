@@ -1,3 +1,4 @@
+{{$context := .}}
 <style>
   .qor-inline-actions {
     float: left;
@@ -9,11 +10,12 @@
     line-height: 32px;
   }
 </style>
+
 {{with .Result}}
   <div class="qor-inline-actions">
-    {{range $inline_action := .InlineActions }}
+    {{range $action := .InlineActions }}
       <div class="qor-action">
-        {{$inline_action}}
+        {{$action.ToHTML $context}}
       </div>
     {{end}}
   </div>

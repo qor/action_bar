@@ -9,29 +9,18 @@ import (
 	"github.com/qor/qor/utils"
 )
 
-// ActionBar stores configuration about a action bar.
-type ActionBar struct {
-	Admin   *admin.Admin
-	Actions []*Action
-}
-
-// Config stores configuration for a render
-type Config struct {
-	// some inline edit actions that will placed on the bar
-	InlineActions []template.HTML
-}
-
-// Action define a addition action(link), will append to the top-right menu.
-type Action struct {
-	Name string
-	Link string
-}
-
 func init() {
 	admin.RegisterViewPath("github.com/qor/action_bar/views")
 }
 
-// New will create a ActionBar object
+// ActionBar stores configuration about a action bar.
+type ActionBar struct {
+	Admin         *admin.Admin
+	GlobalActions []ActionInterface
+	actions       []ActionInterface
+}
+
+// New will create an ActionBar object
 func New(admin *admin.Admin) *ActionBar {
 	bar := &ActionBar{Admin: admin}
 	ctr := &controller{ActionBar: bar}
@@ -40,37 +29,42 @@ func New(admin *admin.Admin) *ActionBar {
 	return bar
 }
 
-// RegisterAction registered a new action
-func (bar *ActionBar) RegisterAction(action *Action) {
-	bar.Actions = append(bar.Actions, action)
+// RegisterAction register global action
+func (bar *ActionBar) RegisterAction(action ActionInterface) {
+	bar.GlobalActions = append(bar.GlobalActions, action)
+	bar.actions = bar.GlobalActions
+}
+
+// Actions register actions
+func (bar *ActionBar) Actions(actions ...ActionInterface) *ActionBar {
+	newBar := &ActionBar{Admin: bar.Admin, actions: bar.GlobalActions}
+	newBar.actions = append(newBar.actions, actions...)
+	return newBar
 }
 
 // Render will return the HTML of the bar, used this function to render the bar in frontend page's template or layout
-func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request, configs ...Config) template.HTML {
-	context := bar.Admin.NewContext(w, r)
-	result := map[string]interface{}{
-		"EditMode":     bar.EditMode(w, r),
-		"Auth":         bar.Admin.Auth,
-		"CurrentUser":  bar.Admin.Auth.GetCurrentUser(context),
-		"Actions":      bar.Actions,
-		"RouterPrefix": bar.Admin.GetRouter().Prefix,
+func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HTML {
+	var (
+		actions, inlineActions []ActionInterface
+		context                = bar.Admin.NewContext(w, r)
+	)
+	for _, action := range bar.actions {
+		if action.InlineAction() {
+			inlineActions = append(inlineActions, action)
+		} else {
+			actions = append(actions, action)
+		}
 	}
-	if len(configs) > 0 {
-		result["InlineActions"] = configs[0].InlineActions
+
+	result := map[string]interface{}{
+		"EditMode":      bar.EditMode(w, r),
+		"Auth":          bar.Admin.Auth,
+		"CurrentUser":   bar.Admin.Auth.GetCurrentUser(context),
+		"Actions":       actions,
+		"InlineActions": inlineActions,
+		"RouterPrefix":  bar.Admin.GetRouter().Prefix,
 	}
 	return context.Render("action_bar/action_bar", result)
-}
-
-// EditMode return whether current mode is `Preview` or `Edit`
-func (bar *ActionBar) EditMode(w http.ResponseWriter, r *http.Request) bool {
-	context := bar.Admin.NewContext(w, r)
-	if bar.Admin.Auth.GetCurrentUser(context) == nil {
-		return false
-	}
-	if cookie, err := r.Cookie("qor-action-bar"); err == nil {
-		return cookie.Value == "true"
-	}
-	return false
 }
 
 // FuncMap will return helper to render inline edit button
@@ -82,6 +76,23 @@ func (bar *ActionBar) FuncMap(w http.ResponseWriter, r *http.Request) template.F
 	}
 
 	return funcMap
+}
+
+// EditMode return whether current mode is `Preview` or `Edit`
+func (bar *ActionBar) EditMode(w http.ResponseWriter, r *http.Request) bool {
+	return isEditMode(bar.Admin.NewContext(w, r))
+}
+
+func isEditMode(context *admin.Context) bool {
+	if auth := context.Admin.Auth; auth != nil {
+		if auth.GetCurrentUser(context) == nil {
+			return false
+		}
+	}
+	if cookie, err := context.Request.Cookie("qor-action-bar"); err == nil {
+		return cookie.Value == "true"
+	}
+	return false
 }
 
 func (bar *ActionBar) RenderEditButtonWithResource(w http.ResponseWriter, r *http.Request, value interface{}, resources ...*admin.Resource) template.HTML {
