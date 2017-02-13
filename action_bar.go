@@ -55,11 +55,11 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 			actions = append(actions, action)
 		}
 	}
-
+	context.Context.CurrentUser = bar.Admin.Auth.GetCurrentUser(context)
 	result := map[string]interface{}{
 		"EditMode":      bar.EditMode(w, r),
 		"Auth":          bar.Admin.Auth,
-		"CurrentUser":   bar.Admin.Auth.GetCurrentUser(context),
+		"CurrentUser":   context.Context.CurrentUser,
 		"Actions":       actions,
 		"InlineActions": inlineActions,
 		"RouterPrefix":  bar.Admin.GetRouter().Prefix,
