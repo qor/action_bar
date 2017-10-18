@@ -55,10 +55,10 @@ func (bar *ActionBar) Render(w http.ResponseWriter, r *http.Request) template.HT
 			actions = append(actions, action)
 		}
 	}
-	context.Context.CurrentUser = bar.Admin.Config.Auth.GetCurrentUser(context)
+	context.Context.CurrentUser = bar.Admin.Auth.GetCurrentUser(context)
 	result := map[string]interface{}{
 		"EditMode":      bar.EditMode(w, r),
-		"Auth":          bar.Admin.Config.Auth,
+		"Auth":          bar.Admin.Auth,
 		"CurrentUser":   context.Context.CurrentUser,
 		"Actions":       actions,
 		"InlineActions": inlineActions,
@@ -84,7 +84,7 @@ func (bar *ActionBar) EditMode(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func isEditMode(context *admin.Context) bool {
-	if auth := context.Admin.Config.Auth; auth != nil {
+	if auth := context.Admin.Auth; auth != nil {
 		if auth.GetCurrentUser(context) == nil {
 			return false
 		}
