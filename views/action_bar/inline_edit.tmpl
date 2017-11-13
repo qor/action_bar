@@ -28,32 +28,24 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-          function closeActionBarEditBox() {
-            setTimeout(function() {
-              window.parent.document.getElementById('qor-actionbar-iframe').classList.remove("show");
-              window.parent.document.querySelector('body').classList.remove("open-actionbar-editor");
-            }, 350);
-          }
+        function closeWidgetEditBox() {
+          setTimeout(function() {
+            window.parent.document.getElementById('qor-widget-iframe').classList.remove("show");
+            window.parent.document.querySelector('body').classList.remove("open-widget-editor");
+          }, 350);
+        }
 
-          // If reload iframe by action button
-          if ($(this).width() > 1) {
-            closeActionBarEditBox();
-          }
-
-          // Reload parent window when click form submitted
-          $('.qor-theme-slideout').on('slideoutSubmitComplete.qor.slideout' , function() {
-            setTimeout(function() {
-              parent.window.location.reload();
-            }, 300);
-          });
-
-          $(document).on('keyup', function(e) {
-            if (e.keyCode === 27) {
-              closeActionBarEditBox();
-            }
-          }).on("click", ".qor-button--cancel, .qor-slideout__close", function() {
-            closeActionBarEditBox();
-          });
+        $(document).on('bottomsheetSubmitComplete.qor.bottomsheets', function(){
+          closeWidgetEditBox();
+        })
+        // Reload parent window when click form submitted
+        $('.qor-slideout').on('slideoutSubmitComplete.qor.slideout' , function() {
+          setTimeout(function() {
+            parent.window.location.reload();
+          }, 300);
+        }).on('slideoutClosed.qor.slideout', function(){
+          closeWidgetEditBox();
+        });
       });
     </script>
   </body>
